@@ -3,12 +3,12 @@ import DeckGL from '@deck.gl/react/typed';
 import {
   CartoLayer,
   setDefaultCredentials,
-  MAP_TYPES,
   BASEMAP,
 } from '@deck.gl/carto/typed';
 import { Map as ReactMapGL } from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
 import { Dataset, LayerConfig, LayerVisConfig } from 'model';
+import { LayersList } from '@deck.gl/core/typed';
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
@@ -25,27 +25,59 @@ const INITIAL_VIEW_STATE = {
 
 interface MapContainerProps {
   datasets: Dataset[];
-  layers: LayerConfig[];
+  layerConfigs: LayerConfig[];
   layerVisConfigs: LayerVisConfig[];
 }
 
-const MapContainer = ({ datasets }: MapContainerProps) => {
-  const layer = new CartoLayer({
-    type: MAP_TYPES.QUERY,
-    connection: 'carto_dw',
-    data: 'select * from carto-demo-data.demo_tables.retail_stores',
-    pointRadiusMinPixels: 2,
-    getLineColor: [0, 0, 0, 200],
-    getFillColor: [238, 77, 90],
-    lineWidthMinPixels: 1,
-  });
+const createLayerOverlay = (
+  datasets: Dataset[],
+  layerConfigs: LayerConfig[],
+  layerVisConfigs: LayerVisConfig[]
+): LayersList => {
+  const layers: LayersList = [];
+
+  for (let i = 0; i < layerConfigs.length; i++) {
+    const { datasetId, id } = layerConfigs[i];
+    const dataset = datasets.find((dataset) => dataset.id === datasetId);
+
+    if (!dataset) {
+      continue;
+    }
+
+    const { type, connection, query } = dataset;
+
+    const layerVisConfig = layerVisConfigs[i];
+    const { outlineColor, outlineSize, fillColor } = layerVisConfig;
+
+    layers.push(
+      new CartoLayer({
+        id,
+        type,
+        connection,
+        data: query,
+        pointRadiusMinPixels: outlineSize,
+        getLineColor: outlineColor,
+        getFillColor: fillColor,
+        lineWidthMinPixels: 1,
+      })
+    );
+  }
+
+  return layers;
+};
+
+const MapContainer = ({
+  datasets,
+  layerConfigs,
+  layerVisConfigs,
+}: MapContainerProps) => {
+  const layers = createLayerOverlay(datasets, layerConfigs, layerVisConfigs);
 
   return (
     <DeckGL
       controller={true}
       initialViewState={INITIAL_VIEW_STATE}
-      layers={[layer]}
-      parameters={{}}
+      layers={layers}
     >
       <ReactMapGL mapLib={maplibregl} mapStyle={BASEMAP.VOYAGER} />
     </DeckGL>

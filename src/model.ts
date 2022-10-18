@@ -1,4 +1,4 @@
-import { Palette } from '@mui/material';
+import { MapType as CartoMapType } from '@deck.gl/carto/typed/api/maps-api-common';
 
 export interface BaseAction<T = unknown> {
   type: string;
@@ -11,16 +11,12 @@ export interface MapState {
   layerVisConfigs: LayerVisConfig[];
 }
 
-export enum DatasetType {
-  Query,
-}
-
 export interface Dataset {
   label: string;
   id: string;
   query: string;
   connection: string;
-  type: DatasetType;
+  type: CartoMapType;
   schema: SchemaDefinitionItem[];
   size: number;
   rows: number;
@@ -45,7 +41,7 @@ interface BaseLayerVisConfig {
 
 export interface LayerVisConfig extends BaseLayerVisConfig {
   outlineSize: number;
-  outlineColor: string;
+  outlineColor: number[];
   fillColorProp: string;
-  fillColor: Palette;
+  fillColor: number[];
 }

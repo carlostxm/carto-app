@@ -1,11 +1,14 @@
-import 'mapbox-gl/dist/mapbox-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import DeckGL from '@deck.gl/react/typed';
 import {
   CartoLayer,
   setDefaultCredentials,
   MAP_TYPES,
+  BASEMAP,
 } from '@deck.gl/carto/typed';
 import { Map as ReactMapGL } from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+import { Dataset, LayerConfig, LayerVisConfig } from 'model';
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
@@ -20,7 +23,13 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-export function Map() {
+interface MapContainerProps {
+  datasets: Dataset[];
+  layers: LayerConfig[];
+  layerVisConfigs: LayerVisConfig[];
+}
+
+const MapContainer = ({ datasets }: MapContainerProps) => {
   const layer = new CartoLayer({
     type: MAP_TYPES.QUERY,
     connection: 'carto_dw',
@@ -36,11 +45,11 @@ export function Map() {
       controller={true}
       initialViewState={INITIAL_VIEW_STATE}
       layers={[layer]}
+      parameters={{}}
     >
-      <ReactMapGL
-        mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-        mapStyle={'mapbox://styles/mapbox/dark-v10'}
-      />
+      <ReactMapGL mapLib={maplibregl} mapStyle={BASEMAP.VOYAGER} />
     </DeckGL>
   );
-}
+};
+
+export default MapContainer;

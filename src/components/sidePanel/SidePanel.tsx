@@ -4,9 +4,10 @@ import LayerStylePanel from './LayerStylePanel';
 import LayersPanel from './LayersPanel';
 
 interface SidePanelProps {
-  datasets: Dataset[];
-  layers: LayerConfig[];
-  layerVisConfigs: LayerVisConfig[];
+  datasets: Record<string, Dataset>;
+  layers: Record<string, LayerConfig>;
+  layerVisConfigs: Record<string, LayerVisConfig>;
+  layerOrder: string[];
 }
 
 type SidePanelViewMode = 'list' | 'edit';
@@ -25,13 +26,11 @@ const SidePanel = (props: SidePanelProps) => {
     setSelectedLayer(null);
   };
 
-  return viewMode === 'edit' ? (
-    selectedLayer && (
-      <LayerStylePanel
-        onExit={handleLayerStyleExitClick}
-        layerConfig={selectedLayer}
-      />
-    )
+  return viewMode === 'edit' && selectedLayer ? (
+    <LayerStylePanel
+      onExit={handleLayerStyleExitClick}
+      layerConfig={selectedLayer}
+    />
   ) : (
     <LayersPanel onLayerClick={handleLayerClick} {...props} />
   );

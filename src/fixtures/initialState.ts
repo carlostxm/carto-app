@@ -2,8 +2,8 @@ import { MAP_TYPES } from '@deck.gl/carto/typed';
 import { MapState } from 'model';
 
 export const INITIAL_STATE: MapState = {
-  datasets: [
-    {
+  datasets: {
+    retail_stores_0: {
       label: 'retail_stores',
       type: MAP_TYPES.QUERY,
       connection: 'carto_dw',
@@ -26,34 +26,34 @@ export const INITIAL_STATE: MapState = {
         },
       ],
     },
-  ],
-  layers: [
-    {
+  },
+  layers: {
+    'retail_stores_0__layer-0': {
       datasetId: 'retail_stores_0',
       id: 'retail_stores_0__layer-0',
       label: 'Layer 0',
     },
-    {
+    'retail_stores_0__layer-1': {
       datasetId: 'retail_stores_0',
       id: 'retail_stores_0__layer-1',
       label: 'Layer 1',
     },
-  ],
-  layerVisConfigs: [
-    {
+  },
+  layerVisConfigs: {
+    'retail_stores_0__layer-0': {
       id: 'retail_stores_0__layer-0',
       outlineColor: [0, 0, 0, 200],
       outlineSize: 2,
       fillColorProp: 'name',
       fillColor: [238, 77, 90],
     },
-    {
+    'retail_stores_0__layer-1': {
       id: 'retail_stores_0__layer-1',
       outlineColor: [0, 0, 0, 200],
       outlineSize: 2,
       fillColorProp: 'name',
       fillColor: [238, 77, 90],
     },
-  ],
+  },
   layerOrder: ['retail_stores_0__layer-0', 'retail_stores_0__layer-1'],
 };

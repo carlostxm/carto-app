@@ -24,54 +24,54 @@ const INITIAL_VIEW_STATE = {
 };
 
 interface MapContainerProps {
-  datasets: Dataset[];
-  layerConfigs: LayerConfig[];
-  layerVisConfigs: LayerVisConfig[];
+  datasets: Record<string, Dataset>;
+  layerConfigs: Record<string, LayerConfig>;
+  layerVisConfigs: Record<string, LayerVisConfig>;
+  layerOrder: string[];
 }
 
-const createLayerOverlay = (
-  datasets: Dataset[],
-  layerConfigs: LayerConfig[],
-  layerVisConfigs: LayerVisConfig[]
+const createLayersOverlay = (
+  datasets: Record<string, Dataset>,
+  layerConfigs: Record<string, LayerConfig>,
+  layerVisConfigs: Record<string, LayerVisConfig>,
+  layerOrder: string[]
 ): LayersList => {
-  const layers: LayersList = [];
-
-  for (let i = 0; i < layerConfigs.length; i++) {
-    const { datasetId, id } = layerConfigs[i];
-    const dataset = datasets.find((dataset) => dataset.id === datasetId);
-
-    if (!dataset) {
-      continue;
-    }
+  return layerOrder.map((layerId) => {
+    const { datasetId, id } = layerConfigs[layerId];
+    const dataset = datasets[datasetId];
 
     const { type, connection, query } = dataset;
 
-    const layerVisConfig = layerVisConfigs[i];
+    const layerVisConfig = layerVisConfigs[layerId];
     const { outlineColor, outlineSize, fillColor } = layerVisConfig;
 
-    layers.push(
-      new CartoLayer({
-        id,
-        type,
-        connection,
-        data: query,
-        pointRadiusMinPixels: outlineSize,
-        getLineColor: outlineColor,
-        getFillColor: fillColor,
-        lineWidthMinPixels: 1,
-      })
-    );
-  }
+    const layer = new CartoLayer({
+      id,
+      type,
+      connection,
+      data: query,
+      pointRadiusMinPixels: outlineSize,
+      getLineColor: outlineColor,
+      getFillColor: fillColor,
+      lineWidthMinPixels: 1,
+    });
 
-  return layers;
+    return layer;
+  });
 };
 
 const MapContainer = ({
   datasets,
   layerConfigs,
   layerVisConfigs,
+  layerOrder,
 }: MapContainerProps) => {
-  const layers = createLayerOverlay(datasets, layerConfigs, layerVisConfigs);
+  const layers = createLayersOverlay(
+    datasets,
+    layerConfigs,
+    layerVisConfigs,
+    layerOrder
+  );
 
   return (
     <DeckGL

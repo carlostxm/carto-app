@@ -6,14 +6,11 @@ export interface BaseAction<T = unknown> {
 }
 
 export interface MapState {
-  datasets: Dataset[];
-  layers: LayerConfig[]; // Think about refactor to Map<string, LayerConfig>
-  layerVisConfigs: LayerVisConfig[]; // Think about refactor to Map<string, LayerVisConfig>
+  datasets: Record<string, Dataset>;
+  layers: Record<string, LayerConfig>; // Order is defined by layerOrder, indexed to optimaze search i.e. read or remove
+  layerVisConfigs: Record<string, LayerVisConfig>;
   layerOrder: string[];
 }
-
-// Array
-// Better to keep order when a new layer is added or removed
 
 interface BaseDataset {
   id: string;

@@ -44,3 +44,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Model
+
+LayerConfig. layerConfig and layerVisConfig modeled indexed to optimize access. Objects or Maps? Modeled as objects because easy syntax to avoid mutations. If it's moved to Redux to support persistence, Maps are not serializable, so it's harder to implement.

@@ -5,12 +5,18 @@ import Stack from '@mui/material/Stack';
 import { LayerConfig, Dataset } from 'model';
 
 interface LayersPanelProps {
-  layers: LayerConfig[];
-  datasets: Dataset[];
+  layers: Record<string, LayerConfig>;
+  datasets: Record<string, Dataset>;
+  layerOrder: string[];
   onLayerClick: (layer: LayerConfig) => void;
 }
 
-const LayersPanel = ({ onLayerClick, layers, datasets }: LayersPanelProps) => {
+const LayersPanel = ({
+  onLayerClick,
+  layers,
+  datasets,
+  layerOrder,
+}: LayersPanelProps) => {
   const handleLayerClick = (layer: LayerConfig) => () => {
     onLayerClick(layer);
   };
@@ -23,10 +29,9 @@ const LayersPanel = ({ onLayerClick, layers, datasets }: LayersPanelProps) => {
     >
       <h3>Layers</h3>
       <Stack spacing={1}>
-        {layers.map((layer) => {
-          const dataset = datasets.find(
-            (dataset) => dataset.id === layer.datasetId
-          );
+        {layerOrder.map((layerId) => {
+          const layer = layers[layerId];
+          const dataset = datasets[layer.datasetId];
           return (
             <LayerCard
               key={layer.id}

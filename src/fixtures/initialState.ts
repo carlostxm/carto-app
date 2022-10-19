@@ -33,6 +33,11 @@ export const INITIAL_STATE: MapState = {
       id: 'retail_stores_0__layer-0',
       label: 'Layer 0',
     },
+    {
+      datasetId: 'retail_stores_0',
+      id: 'retail_stores_0__layer-1',
+      label: 'Layer 1',
+    },
   ],
   layerVisConfigs: [
     {
@@ -42,5 +47,13 @@ export const INITIAL_STATE: MapState = {
       fillColorProp: 'name',
       fillColor: [238, 77, 90],
     },
+    {
+      id: 'retail_stores_0__layer-1',
+      outlineColor: [0, 0, 0, 200],
+      outlineSize: 2,
+      fillColorProp: 'name',
+      fillColor: [238, 77, 90],
+    },
   ],
+  layerOrder: ['retail_stores_0__layer-0', 'retail_stores_0__layer-1'],
 };

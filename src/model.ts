@@ -7,13 +7,20 @@ export interface BaseAction<T = unknown> {
 
 export interface MapState {
   datasets: Dataset[];
-  layers: LayerConfig[];
-  layerVisConfigs: LayerVisConfig[];
+  layers: LayerConfig[]; // Think about refactor to Map<string, LayerConfig>
+  layerVisConfigs: LayerVisConfig[]; // Think about refactor to Map<string, LayerVisConfig>
+  layerOrder: string[];
 }
 
-export interface Dataset {
-  label: string;
+// Array
+// Better to keep order when a new layer is added or removed
+
+interface BaseDataset {
   id: string;
+  label: string;
+}
+
+interface CartoDataset extends BaseDataset {
   query: string;
   connection: string;
   type: CartoMapType;
@@ -21,6 +28,8 @@ export interface Dataset {
   size: number;
   rows: number;
 }
+
+export type Dataset = CartoDataset; // | OtherDatasetVendor
 
 type SchemaFieldType = 'number' | 'string';
 

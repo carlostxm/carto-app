@@ -37,18 +37,20 @@ const createLayersOverlay = (
     const { type, connection, query } = dataset;
 
     const layerVisConfig = layerVisConfigs[layerId];
-    const { outlineColor, outlineSize, fillColor, isVisible } = layerVisConfig;
+    const { outlineColor, outlineSize, fillColor, isVisible, radius } =
+      layerVisConfig;
 
     const layer = new CartoLayer({
       id,
       type,
       connection,
       data: query,
-      pointRadiusMinPixels: outlineSize,
+      pointRadiusMinPixels: radius,
       getLineColor: outlineColor,
       getFillColor: fillColor,
-      lineWidthMinPixels: 1,
+      lineWidthMinPixels: outlineSize,
       visible: isVisible,
+      getRadius: radius,
     });
 
     return layer;

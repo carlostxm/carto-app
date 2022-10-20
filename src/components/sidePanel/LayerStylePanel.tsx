@@ -1,5 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import React from 'react';
 import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
+import { Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { LayerConfig, LayerVisConfig } from 'model';
 import { ColorPicker } from 'components';
@@ -19,7 +22,7 @@ const LayerStylePanel = ({
   layerVisConfig,
 }: LayerStylePanelProps) => {
   const { label } = layerConfig;
-  const { outlineColor, fillColor } = layerVisConfig;
+  const { outlineColor, fillColor, radius, outlineSize } = layerVisConfig;
 
   const handleFieldColorChange =
     (fieldName: keyof LayerVisConfig) => (color: string) => {
@@ -29,13 +32,22 @@ const LayerStylePanel = ({
       });
     };
 
+  const handleSliderChange =
+    //@ts-ignore Ignore event, just taking value
+    (fieldName: keyof LayerVisConfig) => (event, value: number | number[]) => {
+      onStyleChange({
+        ...layerVisConfig,
+        [fieldName]: value as number,
+      });
+    };
+
   return (
     <>
       <Button variant='text' onClick={onExit}>
         <ArrowBackIcon />
         Back
       </Button>
-      <div>
+      <div css={{ padding: '8px' }}>
         <h3>{label}</h3>
         <ColorPicker
           label={'Fill color'}
@@ -47,6 +59,34 @@ const LayerStylePanel = ({
           defaultValue={getHexFromRGB(outlineColor)}
           onChange={handleFieldColorChange('outlineColor')}
         />
+        <div>
+          <Typography variant='caption' display='block'>
+            Radius
+          </Typography>
+          <Slider
+            size='small'
+            min={1}
+            max={20}
+            aria-label='Radius'
+            valueLabelDisplay='auto'
+            value={radius}
+            onChange={handleSliderChange('radius')}
+          />
+        </div>
+        <div>
+          <Typography variant='caption' display='block'>
+            Outline size
+          </Typography>
+          <Slider
+            size='small'
+            value={outlineSize}
+            min={1}
+            max={5}
+            aria-label='Outline size'
+            valueLabelDisplay='auto'
+            onChange={handleSliderChange('outlineSize')}
+          />
+        </div>
       </div>
     </>
   );

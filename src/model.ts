@@ -50,6 +50,7 @@ export type LayerVisConfig = PointLayerVisConfig; // | CellLayerVisConfig | Clus
 
 export interface PointLayerVisConfig extends BaseLayerVisConfig {
   type: 'point';
+  radius: number;
   outlineSize: number;
   outlineColor: number[];
   fillColorProp: string;

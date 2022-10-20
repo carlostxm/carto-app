@@ -48,6 +48,7 @@ export const INITIAL_STATE: MapState = {
       fillColorProp: 'name',
       fillColor: [238, 77, 90],
       isVisible: true,
+      radius: 2,
     },
     'retail_stores_0__layer-1': {
       type: 'point',
@@ -57,6 +58,7 @@ export const INITIAL_STATE: MapState = {
       fillColorProp: 'name',
       fillColor: [94, 203, 21],
       isVisible: true,
+      radius: 2,
     },
   },
   layerOrder: ['retail_stores_0__layer-0', 'retail_stores_0__layer-1'],

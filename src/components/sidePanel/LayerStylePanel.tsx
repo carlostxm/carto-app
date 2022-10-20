@@ -1,11 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import Button from '@mui/material/Button';
-import Slider from '@mui/material/Slider';
-import { Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { LayerConfig, LayerVisConfig } from 'model';
-import { ColorPicker } from 'components';
+import { ColorPicker, Slider } from 'components';
 import { getRGBFromHex, getHexFromRGB } from 'translators';
 
 interface LayerStylePanelProps {
@@ -33,11 +31,10 @@ const LayerStylePanel = ({
     };
 
   const handleSliderChange =
-    //@ts-ignore Ignore event, just taking value
-    (fieldName: keyof LayerVisConfig) => (event, value: number | number[]) => {
+    (fieldName: keyof LayerVisConfig) => (value: number) => {
       onStyleChange({
         ...layerVisConfig,
-        [fieldName]: value as number,
+        [fieldName]: value,
       });
     };
 
@@ -59,34 +56,20 @@ const LayerStylePanel = ({
           defaultValue={getHexFromRGB(outlineColor)}
           onChange={handleFieldColorChange('outlineColor')}
         />
-        <div>
-          <Typography variant='caption' display='block'>
-            Radius
-          </Typography>
-          <Slider
-            size='small'
-            min={1}
-            max={20}
-            aria-label='Radius'
-            valueLabelDisplay='auto'
-            value={radius}
-            onChange={handleSliderChange('radius')}
-          />
-        </div>
-        <div>
-          <Typography variant='caption' display='block'>
-            Outline size
-          </Typography>
-          <Slider
-            size='small'
-            value={outlineSize}
-            min={1}
-            max={5}
-            aria-label='Outline size'
-            valueLabelDisplay='auto'
-            onChange={handleSliderChange('outlineSize')}
-          />
-        </div>
+        <Slider
+          label={'Radius'}
+          min={1}
+          max={20}
+          value={radius}
+          onChange={handleSliderChange('radius')}
+        />
+        <Slider
+          label={'Outline size'}
+          min={1}
+          max={5}
+          value={outlineSize}
+          onChange={handleSliderChange('outlineSize')}
+        />
       </div>
     </>
   );

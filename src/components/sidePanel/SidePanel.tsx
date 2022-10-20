@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LayerConfig, LayerVisConfig } from 'model';
 import LayerStylePanel from './LayerStylePanel';
 import LayersPanel from './LayersPanel';
-import { useMapLayers } from 'hooks/mapLayers';
+import { useMapLayers } from 'hooks';
 
 type SidePanelViewMode = 'list' | 'edit';
 

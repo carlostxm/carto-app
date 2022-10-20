@@ -24,7 +24,7 @@ const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
     >
       <h3>Layers</h3>
       <Stack spacing={1}>
-        {layerOrder.map((layerId) => {
+        {layerOrder.reverse().map((layerId) => {
           const layer = layers[layerId];
           const dataset = datasets[layer.datasetId];
           return (

@@ -47,6 +47,7 @@ export const INITIAL_STATE: MapState = {
       outlineSize: 2,
       fillColorProp: 'name',
       fillColor: [238, 77, 90],
+      isVisible: true,
     },
     'retail_stores_0__layer-1': {
       type: 'point',
@@ -54,7 +55,8 @@ export const INITIAL_STATE: MapState = {
       outlineColor: [0, 0, 0, 200],
       outlineSize: 2,
       fillColorProp: 'name',
-      fillColor: [238, 77, 90],
+      fillColor: [94, 203, 21],
+      isVisible: true,
     },
   },
   layerOrder: ['retail_stores_0__layer-0', 'retail_stores_0__layer-1'],

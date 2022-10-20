@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { LayerConfig, LayerVisConfig } from 'model';
 import { ColorPicker } from 'components';
-import { getRGBFromHex } from 'translators';
+import { getRGBFromHex, getHexFromRGB } from 'translators';
 
 interface LayerStylePanelProps {
   onExit: () => void;
@@ -19,20 +19,15 @@ const LayerStylePanel = ({
   layerVisConfig,
 }: LayerStylePanelProps) => {
   const { label } = layerConfig;
+  const { outlineColor, fillColor } = layerVisConfig;
 
-  const handleFillColorChange = (color: string) => {
-    onStyleChange({
-      ...layerVisConfig,
-      fillColor: getRGBFromHex(color),
-    });
-  };
-
-  const handleOutlineColorChange = (color: string) => {
-    onStyleChange({
-      ...layerVisConfig,
-      outlineColor: getRGBFromHex(color),
-    });
-  };
+  const handleFieldColorChange =
+    (fieldName: keyof LayerVisConfig) => (color: string) => {
+      onStyleChange({
+        ...layerVisConfig,
+        [fieldName]: getRGBFromHex(color),
+      });
+    };
 
   return (
     <>
@@ -42,10 +37,15 @@ const LayerStylePanel = ({
       </Button>
       <div>
         <h3>{label}</h3>
-        <ColorPicker label={'Fill color'} onChange={handleFillColorChange} />
+        <ColorPicker
+          label={'Fill color'}
+          defaultValue={getHexFromRGB(fillColor)}
+          onChange={handleFieldColorChange('fillColor')}
+        />
         <ColorPicker
           label={'Outline color'}
-          onChange={handleOutlineColorChange}
+          defaultValue={getHexFromRGB(outlineColor)}
+          onChange={handleFieldColorChange('outlineColor')}
         />
       </div>
     </>

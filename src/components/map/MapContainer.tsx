@@ -30,14 +30,14 @@ const createLayersOverlay = (
   layerVisConfigs: Record<string, LayerVisConfig>,
   layerOrder: string[]
 ): LayersList => {
-  return layerOrder.map((layerId) => {
+  return layerOrder.reverse().map((layerId) => {
     const { datasetId, id } = layerConfigs[layerId];
     const dataset = datasets[datasetId];
 
     const { type, connection, query } = dataset;
 
     const layerVisConfig = layerVisConfigs[layerId];
-    const { outlineColor, outlineSize, fillColor } = layerVisConfig;
+    const { outlineColor, outlineSize, fillColor, isVisible } = layerVisConfig;
 
     const layer = new CartoLayer({
       id,
@@ -48,6 +48,7 @@ const createLayersOverlay = (
       getLineColor: outlineColor,
       getFillColor: fillColor,
       lineWidthMinPixels: 1,
+      visible: isVisible,
     });
 
     return layer;

@@ -4,10 +4,11 @@ import React, { ChangeEvent } from 'react';
 
 interface ColorPickerProps {
   label: string;
+  defaultValue: string | null;
   onChange: (hexColor: string) => void;
 }
 
-const ColorPicker = ({ onChange, label }: ColorPickerProps) => {
+const ColorPicker = ({ onChange, label, defaultValue }: ColorPickerProps) => {
   const handleColorChange = (event: ChangeEvent<HTMLInputElement>) => {
     const hexColor = event.target.value;
     onChange(hexColor);
@@ -19,6 +20,7 @@ const ColorPicker = ({ onChange, label }: ColorPickerProps) => {
         {label}
       </Typography>
       <input
+        defaultValue={defaultValue ?? '#000000'}
         type='color'
         css={{
           width: '100%',

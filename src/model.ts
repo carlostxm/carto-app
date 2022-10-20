@@ -54,4 +54,5 @@ export interface PointLayerVisConfig extends BaseLayerVisConfig {
   outlineColor: number[];
   fillColorProp: string;
   fillColor: number[];
+  isVisible: boolean;
 }

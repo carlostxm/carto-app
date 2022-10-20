@@ -48,3 +48,11 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## Model
 
 LayerConfig. layerConfig and layerVisConfig modeled indexed to optimize access. Objects or Maps? Modeled as objects because easy syntax to avoid mutations. If it's moved to Redux to support persistence, Maps are not serializable, so it's harder to implement.
+
+## State Management
+
+Talk about the performance penalty of using React Context instead of Redux. Redux lot of boilerplate for small applications.
+
+## TODO
+
+Extract css() to constants to avoid being serialized on each render

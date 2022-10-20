@@ -9,6 +9,7 @@ import { Map as ReactMapGL } from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
 import { Dataset, LayerConfig, LayerVisConfig } from 'model';
 import { LayersList } from '@deck.gl/core/typed';
+import { useMapLayers } from 'hooks';
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
@@ -22,13 +23,6 @@ const INITIAL_VIEW_STATE = {
   pitch: 0,
   bearing: 0,
 };
-
-interface MapContainerProps {
-  datasets: Record<string, Dataset>;
-  layerConfigs: Record<string, LayerConfig>;
-  layerVisConfigs: Record<string, LayerVisConfig>;
-  layerOrder: string[];
-}
 
 const createLayersOverlay = (
   datasets: Record<string, Dataset>,
@@ -60,12 +54,14 @@ const createLayersOverlay = (
   });
 };
 
-const MapContainer = ({
-  datasets,
-  layerConfigs,
-  layerVisConfigs,
-  layerOrder,
-}: MapContainerProps) => {
+const MapContainer = () => {
+  const {
+    datasets,
+    layers: layerConfigs,
+    layerVisConfigs,
+    layerOrder,
+  } = useMapLayers();
+
   const layers = createLayersOverlay(
     datasets,
     layerConfigs,

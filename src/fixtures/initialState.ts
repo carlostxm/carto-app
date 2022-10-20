@@ -41,6 +41,7 @@ export const INITIAL_STATE: MapState = {
   },
   layerVisConfigs: {
     'retail_stores_0__layer-0': {
+      type: 'point',
       id: 'retail_stores_0__layer-0',
       outlineColor: [0, 0, 0, 200],
       outlineSize: 2,
@@ -48,6 +49,7 @@ export const INITIAL_STATE: MapState = {
       fillColor: [238, 77, 90],
     },
     'retail_stores_0__layer-1': {
+      type: 'point',
       id: 'retail_stores_0__layer-1',
       outlineColor: [0, 0, 0, 200],
       outlineSize: 2,

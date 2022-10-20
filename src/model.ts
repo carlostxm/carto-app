@@ -1,6 +1,6 @@
 import { MapType as CartoMapType } from '@deck.gl/carto/typed/api/maps-api-common';
 
-export interface BaseAction<T = unknown> {
+export interface BaseAction<T = any> {
   type: string;
   payload: T;
 }
@@ -43,9 +43,13 @@ export interface LayerConfig {
 
 interface BaseLayerVisConfig {
   id: string;
+  type: 'point' | 'cluster' | 'cell';
 }
 
-export interface LayerVisConfig extends BaseLayerVisConfig {
+export type LayerVisConfig = PointLayerVisConfig; // | CellLayerVisConfig | ClusterLayerVisConfig;
+
+export interface PointLayerVisConfig extends BaseLayerVisConfig {
+  type: 'point';
   outlineSize: number;
   outlineColor: number[];
   fillColorProp: string;

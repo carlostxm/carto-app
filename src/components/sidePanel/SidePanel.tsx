@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { Dataset, LayerConfig, LayerVisConfig } from 'model';
+import { LayerConfig, LayerVisConfig } from 'model';
 import LayerStylePanel from './LayerStylePanel';
 import LayersPanel from './LayersPanel';
-
-interface SidePanelProps {
-  datasets: Record<string, Dataset>;
-  layers: Record<string, LayerConfig>;
-  layerVisConfigs: Record<string, LayerVisConfig>;
-  layerOrder: string[];
-}
+import { useMapLayers } from 'hooks/mapLayers';
 
 type SidePanelViewMode = 'list' | 'edit';
 
-const SidePanel = (props: SidePanelProps) => {
+const SidePanel = () => {
+  const { layerVisConfigs, updateLayerVisConfig } = useMapLayers();
   const [viewMode, setViewMode] = useState<SidePanelViewMode>('list');
   const [selectedLayer, setSelectedLayer] = useState<LayerConfig | null>(null);
 
@@ -26,13 +21,19 @@ const SidePanel = (props: SidePanelProps) => {
     setSelectedLayer(null);
   };
 
+  const handleLayerStyleChange = (layerVisConfig: LayerVisConfig) => {
+    updateLayerVisConfig(layerVisConfig.id, layerVisConfig);
+  };
+
   return viewMode === 'edit' && selectedLayer ? (
     <LayerStylePanel
       onExit={handleLayerStyleExitClick}
+      onStyleChange={handleLayerStyleChange}
       layerConfig={selectedLayer}
+      layerVisConfig={layerVisConfigs[selectedLayer.id]}
     />
   ) : (
-    <LayersPanel onLayerClick={handleLayerClick} {...props} />
+    <LayersPanel onLayerClick={handleLayerClick} />
   );
 };
 

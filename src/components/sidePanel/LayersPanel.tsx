@@ -1,22 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import react from 'react';
+import React from 'react';
 import LayerCard from './LayerCard';
 import Stack from '@mui/material/Stack';
-import { LayerConfig, Dataset } from 'model';
+import { LayerConfig } from 'model';
+import { useMapLayers } from 'hooks';
 
 interface LayersPanelProps {
-  layers: Record<string, LayerConfig>;
-  datasets: Record<string, Dataset>;
-  layerOrder: string[];
   onLayerClick: (layer: LayerConfig) => void;
 }
 
-const LayersPanel = ({
-  onLayerClick,
-  layers,
-  datasets,
-  layerOrder,
-}: LayersPanelProps) => {
+const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
+  const { layerOrder, datasets, layers } = useMapLayers();
+
   const handleLayerClick = (layer: LayerConfig) => () => {
     onLayerClick(layer);
   };

@@ -3,11 +3,15 @@ import { LayerConfig, LayerVisConfig } from 'model';
 import LayerStylePanel from './LayerStylePanel';
 import LayersPanel from './LayersPanel';
 import { useMapLayers } from 'hooks';
+import { updateLayerVisConfig } from 'actions';
 
 type SidePanelViewMode = 'list' | 'edit';
 
 const SidePanel = () => {
-  const { layerVisConfigs, updateLayerVisConfig } = useMapLayers();
+  const {
+    state: { layerVisConfigs },
+    dispatch,
+  } = useMapLayers();
   const [viewMode, setViewMode] = useState<SidePanelViewMode>('list');
   const [selectedLayer, setSelectedLayer] = useState<LayerConfig | null>(null);
 
@@ -22,7 +26,7 @@ const SidePanel = () => {
   };
 
   const handleLayerStyleChange = (layerVisConfig: LayerVisConfig) => {
-    updateLayerVisConfig(layerVisConfig.id, layerVisConfig);
+    updateLayerVisConfig(dispatch, layerVisConfig.id, layerVisConfig);
   };
 
   return viewMode === 'edit' && selectedLayer ? (

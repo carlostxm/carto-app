@@ -1,29 +1,21 @@
-import React, { useReducer, createContext } from 'react';
-import { INITIAL_STATE } from 'fixtures';
-import { BaseAction, LayerVisConfig, MapState } from 'model';
+import React, { useReducer, createContext, Dispatch } from 'react';
+import { MapState } from 'model';
+import { mapLayersReducer } from 'reducers';
 
-enum MapLayersActions {
-  UpdateVisConfig = 'update-layer-vis-config',
-}
-
-type UpdateLayerVisConfigAction = BaseAction<{
-  layerId: string;
-  layerVisConfig: LayerVisConfig;
-}>;
-
-interface MapLayersContextType extends MapState {
-  updateLayerVisConfig: (
-    layerId: string,
-    layerVisConfig: LayerVisConfig
-  ) => void;
+interface MapLayersContextType {
+  state: MapState;
+  dispatch: Dispatch<any>;
 }
 
 const INITIAL_MAP_LAYERS_CONTEXT: MapLayersContextType = {
-  layers: {},
-  datasets: {},
-  layerVisConfigs: {},
-  layerOrder: [],
-  updateLayerVisConfig: () => {},
+  state: {
+    layerCounter: 0,
+    layers: {},
+    datasets: {},
+    layerVisConfigs: {},
+    layerOrder: [],
+  },
+  dispatch: () => null,
 };
 
 export const MapLayersContext = createContext<MapLayersContextType>(
@@ -31,44 +23,18 @@ export const MapLayersContext = createContext<MapLayersContextType>(
 );
 MapLayersContext.displayName = 'MapLayersContext';
 
-const mapLayersReducer = (state: MapState, action: BaseAction): MapState => {
-  if (action.type === MapLayersActions.UpdateVisConfig) {
-    const { layerId, layerVisConfig } = (action as UpdateLayerVisConfigAction)
-      .payload;
-    return {
-      ...state,
-      layerVisConfigs: {
-        ...state.layerVisConfigs,
-        [layerId]: layerVisConfig,
-      },
-    };
-  }
-  return state;
-};
-
 export const MapLayersProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [state, dispatch] = useReducer(mapLayersReducer, INITIAL_STATE);
-
-  function updateLayerVisConfig(
-    layerId: string,
-    layerVisConfig: LayerVisConfig
-  ) {
-    const action: UpdateLayerVisConfigAction = {
-      type: MapLayersActions.UpdateVisConfig,
-      payload: {
-        layerId,
-        layerVisConfig,
-      },
-    };
-    dispatch(action);
-  }
+  const [state, dispatch] = useReducer(
+    mapLayersReducer,
+    INITIAL_MAP_LAYERS_CONTEXT.state
+  );
 
   return (
-    <MapLayersContext.Provider value={{ ...state, updateLayerVisConfig }}>
+    <MapLayersContext.Provider value={{ state, dispatch }}>
       {children}
     </MapLayersContext.Provider>
   );

@@ -6,6 +6,7 @@ export interface BaseAction<T = any> {
 }
 
 export interface MapState {
+  layerCounter: number; // To create layer UUID
   datasets: Record<string, Dataset>;
   layers: Record<string, LayerConfig>; // Order is defined by layerOrder, indexed to optimaze search i.e. read or remove
   layerVisConfigs: Record<string, LayerVisConfig>;
@@ -28,11 +29,9 @@ interface CartoDataset extends BaseDataset {
 
 export type Dataset = CartoDataset; // | OtherDatasetVendor
 
-type SchemaFieldType = 'number' | 'string';
-
 interface SchemaDefinitionItem {
   name: string;
-  type: SchemaFieldType;
+  type: string;
 }
 
 export interface LayerConfig {
@@ -53,7 +52,7 @@ export interface PointLayerVisConfig extends BaseLayerVisConfig {
   radius: number;
   outlineSize: number;
   outlineColor: number[];
-  fillColorProp: string;
+  fillColorProp?: string;
   fillColor: number[];
   isVisible: boolean;
 }

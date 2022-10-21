@@ -10,10 +10,11 @@ import maplibregl from 'maplibre-gl';
 import { Dataset, LayerConfig, LayerVisConfig } from 'model';
 import { LayersList } from '@deck.gl/core/typed';
 import { useMapLayers } from 'hooks';
+import { CARTO_BASE_URL } from 'config';
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
-  apiBaseUrl: 'https://gcp-europe-west1.api.carto.com',
+  apiBaseUrl: CARTO_BASE_URL,
 });
 
 const INITIAL_VIEW_STATE = {
@@ -50,7 +51,7 @@ const createLayersOverlay = (
       getFillColor: fillColor,
       lineWidthMinPixels: outlineSize,
       visible: isVisible,
-      getRadius: radius,
+      getPointRadius: radius,
     });
 
     return layer;
@@ -59,10 +60,7 @@ const createLayersOverlay = (
 
 const MapContainer = () => {
   const {
-    datasets,
-    layers: layerConfigs,
-    layerVisConfigs,
-    layerOrder,
+    state: { datasets, layers: layerConfigs, layerVisConfigs, layerOrder },
   } = useMapLayers();
 
   const layers = createLayersOverlay(

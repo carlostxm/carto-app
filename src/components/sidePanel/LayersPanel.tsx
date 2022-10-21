@@ -10,7 +10,9 @@ interface LayersPanelProps {
 }
 
 const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
-  const { layerOrder, datasets, layers } = useMapLayers();
+  const {
+    state: { layerOrder, datasets, layers },
+  } = useMapLayers();
 
   const handleLayerClick = (layer: LayerConfig) => () => {
     onLayerClick(layer);

@@ -2,6 +2,7 @@ import { MAP_TYPES } from '@deck.gl/carto/typed';
 import { MapState } from 'model';
 
 export const INITIAL_STATE: MapState = {
+  layerCounter: 2,
   datasets: {
     retail_stores_0: {
       label: 'retail_stores',

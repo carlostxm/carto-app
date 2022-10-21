@@ -1,5 +1,5 @@
 import { MAP_TYPES } from '@deck.gl/carto/typed';
-import { MapState } from 'model';
+import { LayerType, MapState } from 'model';
 
 export const INITIAL_STATE: MapState = {
   layerCounter: 2,
@@ -8,7 +8,7 @@ export const INITIAL_STATE: MapState = {
       label: 'retail_stores',
       type: MAP_TYPES.QUERY,
       connection: 'carto_dw',
-      query: 'select * from carto-demo-data.demo_tables.retail_stores',
+      data: 'select * from carto-demo-data.demo_tables.retail_stores',
       id: 'retail_stores_0', // must be a unique ID created from parameters
       rows: 1000,
       size: 70000,
@@ -42,7 +42,7 @@ export const INITIAL_STATE: MapState = {
   },
   layerVisConfigs: {
     'retail_stores_0__layer-0': {
-      type: 'point',
+      type: LayerType.point,
       id: 'retail_stores_0__layer-0',
       outlineColor: [0, 0, 0, 200],
       outlineSize: 1,
@@ -52,7 +52,7 @@ export const INITIAL_STATE: MapState = {
       radius: 3,
     },
     'retail_stores_0__layer-1': {
-      type: 'point',
+      type: LayerType.point,
       id: 'retail_stores_0__layer-1',
       outlineColor: [0, 0, 0, 200],
       outlineSize: 1,

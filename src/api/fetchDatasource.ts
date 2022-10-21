@@ -1,7 +1,7 @@
 import { MAP_TYPES } from '@deck.gl/carto/typed';
 import axios from 'axios';
 import { CARTO_BASE_URL } from 'config';
-import { Dataset } from 'model';
+import { Dataset, CartoMapType } from 'model';
 
 interface TableResponse {
   size: number;
@@ -17,7 +17,10 @@ const defaultParams = {
   connection: 'carto_dw',
 };
 
-export default function fetchTable(name: string): Promise<Dataset> {
+export default function fetchDatasource(
+  name: string,
+  mapType: CartoMapType
+): Promise<Dataset> {
   return axios
     .get<TableResponse>(CARTO_BASE_URL, {
       ...config,
@@ -34,11 +37,11 @@ export default function fetchTable(name: string): Promise<Dataset> {
         connection: defaultParams.connection,
         id: name,
         label: name,
-        query: `select * from ${name}`,
+        data: mapType === 'tileset' ? name : `select * from ${name}`,
         rows,
         size,
         schema,
-        type: MAP_TYPES.QUERY,
+        type: mapType,
       };
     });
 }

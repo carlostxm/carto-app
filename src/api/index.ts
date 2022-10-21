@@ -1,1 +1,1 @@
-export { default as fetchTable } from './fetchTable';
+export { default as fetchDatasource } from './fetchDatasource';

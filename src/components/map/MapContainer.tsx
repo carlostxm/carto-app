@@ -4,6 +4,7 @@ import {
   CartoLayer,
   setDefaultCredentials,
   BASEMAP,
+  colorBins,
 } from '@deck.gl/carto/typed';
 import { Map as ReactMapGL } from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
@@ -11,6 +12,7 @@ import { Dataset, LayerConfig, LayerVisConfig } from 'model';
 import { LayersList } from '@deck.gl/core/typed';
 import { useMapLayers } from 'hooks';
 import { CARTO_BASE_URL } from 'config';
+import { isPointLayer, isTilesetLayer } from 'services';
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
@@ -31,31 +33,50 @@ const createLayersOverlay = (
   layerVisConfigs: Record<string, LayerVisConfig>,
   layerOrder: string[]
 ): LayersList => {
-  return layerOrder.reverse().map((layerId) => {
-    const { datasetId, id } = layerConfigs[layerId];
-    const dataset = datasets[datasetId];
+  return layerOrder
+    .reverse()
+    .map((layerId) => {
+      const { datasetId, id } = layerConfigs[layerId];
+      const dataset = datasets[datasetId];
 
-    const { type, connection, query } = dataset;
+      const { type, connection, data } = dataset;
 
-    const layerVisConfig = layerVisConfigs[layerId];
-    const { outlineColor, outlineSize, fillColor, isVisible, radius } =
-      layerVisConfig;
+      const layerVisConfig = layerVisConfigs[layerId];
 
-    const layer = new CartoLayer({
-      id,
-      type,
-      connection,
-      data: query,
-      pointRadiusMinPixels: radius,
-      getLineColor: outlineColor,
-      getFillColor: fillColor,
-      lineWidthMinPixels: outlineSize,
-      visible: isVisible,
-      getPointRadius: radius,
-    });
+      if (isPointLayer(layerVisConfig)) {
+        const { outlineColor, outlineSize, fillColor, isVisible, radius } =
+          layerVisConfig;
+        return new CartoLayer({
+          id,
+          type,
+          connection,
+          data,
+          pointRadiusMinPixels: radius,
+          getLineColor: outlineColor,
+          getFillColor: fillColor,
+          lineWidthMinPixels: outlineSize,
+          visible: isVisible,
+          getPointRadius: radius,
+        });
+      } else if (isTilesetLayer(layerVisConfig)) {
+        return new CartoLayer({
+          id,
+          type,
+          connection,
+          data,
+          pointRadiusMinPixels: 2,
+          stroked: false,
+          getFillColor: colorBins({
+            attr: 'total_pop',
+            domain: [10, 1e2, 1e3, 1e4, 1e5, 1e6],
+            colors: 'Temps',
+          }),
+        });
+      }
 
-    return layer;
-  });
+      return null;
+    })
+    .filter(Boolean);
 };
 
 const MapContainer = () => {
@@ -69,6 +90,8 @@ const MapContainer = () => {
     layerVisConfigs,
     layerOrder
   );
+
+  console.log(layers.length);
 
   return (
     <DeckGL

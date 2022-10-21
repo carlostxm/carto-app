@@ -1,4 +1,4 @@
-import { MapType as CartoMapType } from '@deck.gl/carto/typed/api/maps-api-common';
+import { MapType } from '@deck.gl/carto/typed/api/maps-api-common';
 
 export interface BaseAction<T = any> {
   type: string;
@@ -18,8 +18,10 @@ interface BaseDataset {
   label: string;
 }
 
+export type CartoMapType = MapType;
+
 interface CartoDataset extends BaseDataset {
-  query: string;
+  data: string;
   connection: string;
   type: CartoMapType;
   schema: SchemaDefinitionItem[];
@@ -34,6 +36,11 @@ interface SchemaDefinitionItem {
   type: string;
 }
 
+export enum LayerType {
+  point = 'point',
+  tileset = 'tileset',
+}
+
 export interface LayerConfig {
   id: string;
   label: string;
@@ -42,17 +49,24 @@ export interface LayerConfig {
 
 interface BaseLayerVisConfig {
   id: string;
-  type: 'point' | 'cluster' | 'cell';
+  type: LayerType;
 }
 
-export type LayerVisConfig = PointLayerVisConfig; // | CellLayerVisConfig | ClusterLayerVisConfig;
+export type LayerVisConfig = PointLayerVisConfig | TilesetLayerVisConfig;
 
 export interface PointLayerVisConfig extends BaseLayerVisConfig {
-  type: 'point';
+  type: LayerType.point;
   radius: number;
   outlineSize: number;
   outlineColor: number[];
   fillColorProp?: string;
   fillColor: number[];
   isVisible: boolean;
+}
+
+export interface TilesetLayerVisConfig extends BaseLayerVisConfig {
+  type: LayerType.tileset;
+  pointRadiusMinPixels: number;
+  stroked: boolean;
+  colorPalette: string;
 }

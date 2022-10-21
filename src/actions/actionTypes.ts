@@ -3,4 +3,5 @@ export enum ActionTypes {
   AddDataset = 'add-dataset',
   FetchTableStarted = 'fetch-table-started',
   AddLayer = 'add-layer',
+  AddTilesetLayer = 'add-tileset-layer',
 }

@@ -5,6 +5,7 @@ import {
   UpdateLayerVisConfigAction,
 } from 'actions';
 import { MapState, BaseAction } from 'model';
+import getLayerVisConfig from './getLayerVisConfig';
 
 const mapLayersReducer = (state: MapState, action: BaseAction): MapState => {
   switch (action.type) {
@@ -32,7 +33,7 @@ const mapLayersReducer = (state: MapState, action: BaseAction): MapState => {
       };
     case ActionTypes.AddLayer:
       const {
-        payload: { datasetId },
+        payload: { datasetId, layerType },
       } = action as AddLayerAction;
       const nextLayerCounter = state.layerCounter + 1;
       const layerUUID = `${datasetId}--${nextLayerCounter}`;
@@ -50,15 +51,7 @@ const mapLayersReducer = (state: MapState, action: BaseAction): MapState => {
         },
         layerVisConfigs: {
           ...state.layerVisConfigs,
-          [layerUUID]: {
-            type: 'point',
-            id: layerUUID,
-            outlineColor: [0, 0, 0, 200],
-            outlineSize: 1,
-            fillColor: [238, 77, 90],
-            isVisible: true,
-            radius: 3,
-          },
+          [layerUUID]: getLayerVisConfig(layerUUID, layerType),
         },
         layerOrder: [...state.layerOrder, layerUUID],
       };

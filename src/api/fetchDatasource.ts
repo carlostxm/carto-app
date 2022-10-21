@@ -1,4 +1,3 @@
-import { MAP_TYPES } from '@deck.gl/carto/typed';
 import axios from 'axios';
 import { CARTO_BASE_URL } from 'config';
 import { Dataset, CartoMapType } from 'model';

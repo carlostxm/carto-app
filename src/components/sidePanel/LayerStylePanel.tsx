@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { LayerConfig, LayerType, LayerVisConfig } from 'model';
+import { LayerConfig, LayerVisConfig } from 'model';
 import PointLayerStylePanel from './PointLayerStylePanel';
 import { isPointLayer } from 'services';
 

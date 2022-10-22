@@ -7,12 +7,21 @@ import {
   colorBins,
 } from '@deck.gl/carto/typed';
 import { Map as ReactMapGL } from 'react-map-gl';
-import maplibregl from 'maplibre-gl';
 import { Dataset, LayerConfig, LayerVisConfig } from 'model';
 import { LayersList } from '@deck.gl/core/typed';
 import { useMapLayers } from 'hooks';
 import { CARTO_BASE_URL } from 'config';
 import { isPointLayer, isTilesetLayer } from 'services';
+
+// Workaround to be able to show maplibre in production
+// https://github.com/maplibre/maplibre-gl-js/issues/1011
+//@ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import maplibregl from '!maplibre-gl';
+//@ts-ignore
+import maplibreglWorker from 'maplibre-gl/dist/maplibre-gl-csp-worker';
+//@ts-ignore
+maplibregl.workerClass = maplibreglWorker;
 
 setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
@@ -90,8 +99,6 @@ const MapContainer = () => {
     layerVisConfigs,
     layerOrder
   );
-
-  console.log(layers.length);
 
   return (
     <DeckGL

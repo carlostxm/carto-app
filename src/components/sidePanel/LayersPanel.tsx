@@ -18,6 +18,8 @@ const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
     onLayerClick(layer);
   };
 
+  console.log(layerOrder);
+
   return (
     <div
       css={{
@@ -26,18 +28,23 @@ const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
     >
       <h3>Layers</h3>
       <Stack spacing={1}>
-        {layerOrder.reverse().map((layerId) => {
-          const layer = layers[layerId];
-          const dataset = datasets[layer.datasetId];
-          return (
-            <LayerCard
-              key={layer.id}
-              onClick={handleLayerClick(layer)}
-              config={layer}
-              dataset={dataset!}
-            />
-          );
-        })}
+        {/* Show first layer on top */}
+        {layerOrder
+          .slice()
+          .reverse()
+          .map((layerId) => {
+            const layer = layers[layerId];
+            const dataset = datasets[layer.datasetId];
+            console.log(layerId, layer.id);
+            return (
+              <LayerCard
+                key={layer.id}
+                onClick={handleLayerClick(layer)}
+                config={layer}
+                dataset={dataset!}
+              />
+            );
+          })}
       </Stack>
     </div>
   );

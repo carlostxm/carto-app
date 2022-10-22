@@ -42,7 +42,9 @@ const createLayersOverlay = (
   layerVisConfigs: Record<string, LayerVisConfig>,
   layerOrder: string[]
 ): LayersList => {
+  // Show first layer on top
   return layerOrder
+    .slice()
     .reverse()
     .map((layerId) => {
       const { datasetId, id } = layerConfigs[layerId];

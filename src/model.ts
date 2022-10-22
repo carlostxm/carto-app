@@ -50,6 +50,7 @@ export interface LayerConfig {
 interface BaseLayerVisConfig {
   id: string;
   type: LayerType;
+  isVisible: boolean;
 }
 
 export type LayerVisConfig = PointLayerVisConfig | TilesetLayerVisConfig;
@@ -61,7 +62,6 @@ export interface PointLayerVisConfig extends BaseLayerVisConfig {
   outlineColor: number[];
   fillColorProp?: string;
   fillColor: number[];
-  isVisible: boolean;
 }
 
 export interface TilesetLayerVisConfig extends BaseLayerVisConfig {

@@ -70,6 +70,7 @@ const createLayersOverlay = (
           getPointRadius: radius,
         });
       } else if (isTilesetLayer(layerVisConfig)) {
+        const { isVisible } = layerVisConfig;
         return new CartoLayer({
           id,
           type,
@@ -77,6 +78,7 @@ const createLayersOverlay = (
           data,
           pointRadiusMinPixels: 2,
           stroked: false,
+          visible: isVisible,
           getFillColor: colorBins({
             attr: 'total_pop',
             domain: [10, 1e2, 1e3, 1e4, 1e5, 1e6],

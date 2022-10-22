@@ -4,6 +4,7 @@ import {
   AddLayerAction,
   UpdateLayerVisConfigAction,
 } from 'actions';
+import { ToggleLayerVisibilityAction } from 'actions/toggleLayerVisibility';
 import { MapState, BaseAction } from 'model';
 import getLayerVisConfig from './getLayerVisConfig';
 
@@ -55,7 +56,21 @@ const mapLayersReducer = (state: MapState, action: BaseAction): MapState => {
         },
         layerOrder: [...state.layerOrder, layerUUID],
       };
-
+    case ActionTypes.ToggleLayerVisibility:
+      const {
+        payload: { layerId: toggleLayerId },
+      } = action as ToggleLayerVisibilityAction;
+      const toggledVisibility = !state.layerVisConfigs[toggleLayerId].isVisible;
+      return {
+        ...state,
+        layerVisConfigs: {
+          ...state.layerVisConfigs,
+          [toggleLayerId]: {
+            ...state.layerVisConfigs[toggleLayerId],
+            isVisible: toggledVisibility,
+          },
+        },
+      };
     default:
       return state;
   }

@@ -4,4 +4,5 @@ export enum ActionTypes {
   FetchTableStarted = 'fetch-table-started',
   AddLayer = 'add-layer',
   AddTilesetLayer = 'add-tileset-layer',
+  ToggleLayerVisibility = 'toggle-layer-visibility',
 }

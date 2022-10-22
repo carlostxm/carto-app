@@ -7,18 +7,20 @@ import { useMapLayers } from 'hooks';
 
 interface LayersPanelProps {
   onLayerClick: (layer: LayerConfig) => void;
+  onToggleLayerVisible: (layerId: string) => void;
 }
 
-const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
+const LayersPanel = ({
+  onLayerClick,
+  onToggleLayerVisible,
+}: LayersPanelProps) => {
   const {
-    state: { layerOrder, datasets, layers },
+    state: { layerOrder, datasets, layers, layerVisConfigs },
   } = useMapLayers();
 
   const handleLayerClick = (layer: LayerConfig) => () => {
     onLayerClick(layer);
   };
-
-  console.log(layerOrder);
 
   return (
     <div
@@ -35,13 +37,16 @@ const LayersPanel = ({ onLayerClick }: LayersPanelProps) => {
           .map((layerId) => {
             const layer = layers[layerId];
             const dataset = datasets[layer.datasetId];
-            console.log(layerId, layer.id);
+            const { isVisible } = layerVisConfigs[layerId];
+
             return (
               <LayerCard
                 key={layer.id}
                 onClick={handleLayerClick(layer)}
+                onToggleLayerVisible={onToggleLayerVisible}
                 config={layer}
-                dataset={dataset!}
+                dataset={dataset}
+                isVisible={isVisible}
               />
             );
           })}

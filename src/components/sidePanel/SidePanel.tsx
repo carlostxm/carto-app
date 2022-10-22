@@ -3,7 +3,7 @@ import { LayerConfig, LayerVisConfig } from 'model';
 import LayerStylePanel from './LayerStylePanel';
 import LayersPanel from './LayersPanel';
 import { useMapLayers } from 'hooks';
-import { updateLayerVisConfig } from 'actions';
+import { toggleLayerVisibility, updateLayerVisConfig } from 'actions';
 
 type SidePanelViewMode = 'list' | 'edit';
 
@@ -29,6 +29,10 @@ const SidePanel = () => {
     updateLayerVisConfig(dispatch, layerVisConfig.id, layerVisConfig);
   };
 
+  const handleVisibilityChange = (layerId: string) => {
+    toggleLayerVisibility(dispatch, layerId);
+  };
+
   return viewMode === 'edit' && selectedLayer ? (
     <LayerStylePanel
       onExit={handleLayerStyleExitClick}
@@ -37,7 +41,10 @@ const SidePanel = () => {
       layerVisConfig={layerVisConfigs[selectedLayer.id]}
     />
   ) : (
-    <LayersPanel onLayerClick={handleLayerClick} />
+    <LayersPanel
+      onLayerClick={handleLayerClick}
+      onToggleLayerVisible={handleVisibilityChange}
+    />
   );
 };
 

@@ -47,6 +47,8 @@ There are two types of layers:
 - query: Render the default `CartoLayer`'s point layer.
 - tilesets: Render a tileset layer.
 
+**Extra credit**: As layers are added to the `layerOrder` list as the `fetchDataset` response is received, some layers can overlap the others. A **visibility** button (represented with an eye icon) has been added to each layer card to hide/show individually.
+
 The following `point` layer's parameters can be configured:
 
 - Fill color

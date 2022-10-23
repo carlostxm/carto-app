@@ -2,7 +2,63 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## State model
+## Project structure
+
+### Folders
+
+| Folder      | Description                                                                 |
+| ----------- | --------------------------------------------------------------------------- |
+| actions     | Action creators and actionType definition                                   |
+| api         | Functions for HTTP requests                                                 |
+| components  | UI components                                                               |
+| config      | Static configuration modules                                                |
+| context     | Context definitions i.e. `mapLayers` that contains the app global state     |
+| fixtures    | Static mocked data                                                          |
+| hooks       | Common hooks reusable by the components                                     |
+| reducers    | Global state's reducer functions                                            |
+| services    | Utility functions                                                           |
+| translators | Utility function specialized in converting objects from one type to another |
+
+### Main Components
+
+| Folder           | Description                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| index.tsx        | Attaches React root node to the DOM and add some global wrappers                        |
+| App.tsx          | Application main component with the initialization requests                             |
+| Layout.tsx       | Layout component composed of a navigation side bar and the app content                  |
+| SidePanel.tsx    | Control side panel                                                                      |
+| LayersPanel.tsx  | Display the layers shown in the map in renderization order                              |
+| MapContainer.tsx | Responsible of showing the base map and creating the layers objects passed to `deck.gl` |
+
+## Functionality
+
+This application renders three layers on top of a `maplibre` base map.
+
+To simplify the functionality, the datasets are predefined and requests are launched when the application is initialized. When the dataset info is received by the asynchronous request a layer is created.
+
+The datasets preconfigured are:
+
+- `carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup`
+- `carto-demo-data.demo_tables.retail_stores`
+- `carto-demo-data.demo_tables.airports`
+
+There are two types of layers:
+
+- query: Render the default `CartoLayer`'s point layer.
+- tilesets: Render a tileset layer.
+
+The following `point` layer's parameters can be configured:
+
+- Fill color
+- Outline color
+- Outline size
+- Radius
+
+Note: `tileset` layers cannot be customized as is out of the scope of this test application.
+
+## State
+
+### State Model
 
 The state model has been defined with the following structure:
 
@@ -24,29 +80,29 @@ export interface MapState {
 | layerOrder      | string []                      | Layers rendering order where the first position is the layer rendered on top                          |
 | layerCounter    | number                         | Count of the layers created used to create a basic UUID generation function                           |
 
-`datasets`, `layers`, and `layerVisConfigs` has been modeled as an object indexed by a dataset or layer `id`. The other options analyzed are using an `Array` or a `Map`. Finally, it has been chosen to use a plain object because is serializable and optimizes the read/remove operations. `Map` was discarded because in case of implementing persistence, it makes harder the serialization in the local storage or an external service.
+`datasets`, `layers`, and `layerVisConfigs` has been modeled as an object indexed by a dataset or layer `id`. The other options analyzed were using an `Array` or a `Map`. Finally, data is stored in plain objects because is serializable and optimizes the read/remove operations. `Map` was discarded because in case of implementing persistence, it makes harder the serialization in the local storage or an external service.
 
-## State Management
+### State Management
 
-There are state dependencies between components that makes needed a global state management solution.
+There are state dependencies between components that make necesssary a global state management solution.
 
-This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for this small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for enterprise-grade applications where **Redux** is more suitable.
+This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for a small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for enterprise-grade applications where **Redux** is more suitable.
 
-Although **React Context** is used, the architecture has been defined similarly to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the unlikely hypothetic case that this application is migrated in the future.
+Although **React Context** is used, the architecture has been defined similarly to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the case that is required.
 
-### useMapLayers
+#### useMapLayers
 
 The current `state` and `action`'s dispatcher are accessible by a dedicated hook called `useMapLayers`.
 
-### Reducer
+#### Reducer
 
 All the state management logic in the `mapLayersReducer` allows being reused by the different components, having specialized rendering components.
 
-### Actions
+#### Actions
 
 All state changes are driven by actions that are thrown from the components. Action types are defined in the `actions/actionTypes.ts` file.
 
-## Asynchronous requests
+## Asynchronous Requests
 
 `axios` is used to request data to the API as is reduces the boilerplate code compared to the native `window.fetch`. Not implemented for this example but to considered in a real application is the use of `axios` source tokens to cancel on-going requests.
 

@@ -1,6 +1,56 @@
-# Getting Started with Create React App
+# CARTO application
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Model
+
+```
+export interface MapState {
+  datasets: Record<string, Dataset>;
+  layers: Record<string, LayerConfig>;
+  layerVisConfigs: Record<string, LayerVisConfig>;
+  layerOrder: string[];
+  layerCounter: number;
+}
+```
+
+| Field name      | Type                           | Description                                                                                           |
+| --------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| datasets        | Record<string, Dataset>        | Indexed by dataset id storing data relative to the dataset                                            |
+| layers          | Record<string, LayerConfig>    | Indexed by layer unique id, basic layer configuration                                                 |
+| layerVisConfigs | Record<string, LayerVisConfig> | Indexed by layer unique id, visualization configuration as fill color, point radius, visibility, etc. |
+| layerOrder      | string []                      | Layers rendering order where the first position is the layer rendered on top                          |
+| layerCounter    | number                         | Count of the layers created used to create a basic UUID generation function                           |
+
+### Engineering decission
+
+`datasets`, `layers` and `layerVisConfigs` has been modeled as an object indexed by a dataset or layer `id`. The other options analyzed has been using an `Array` or a `Map`. It has been chosen to use a plain object because is serializable and optimize read/remove operations. `Map` was discarded because in case of implementing persistence, it makes harder the serialization in the local storage or a external service.
+
+## State Management
+
+There are state dependencies between components that makes needed a global state management solution.
+
+This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for this small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for entreprise grade applications where **Redux** is more suitable.
+
+Although **React Context** is used, the architecture has been defined similar to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the unlikely hypothetic case that this application is migrated in the future.
+
+### useMapLayers
+
+Current `state` and `action`'s dispatcher are accesible by a dedicated hook called `useMapLayers`.
+
+### Reducer
+
+All the state management logic in the `mapLayersReducer` which allows to be reused by the different components, having spetialized rendering components.
+
+### Actions
+
+All state changes are driven by actions which are thrown from the components. Actions types are defined in the `actions/actionTypes.ts` file.
+
+## Asynchronous requests
+
+`axios` is used to request data to the API as is reduces the boilerplate code compared to the native `window.fetch`. Not implemented for this example but to considered in a real application is the use of `axios` source tokens to cancel on-going requests.
+
+API is accesed from the actions, abstracting the components from this matter.
 
 ## Available Scripts
 
@@ -37,22 +87,4 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-## Model
-
-LayerConfig. layerConfig and layerVisConfig modeled indexed to optimize access. Objects or Maps? Modeled as objects because easy syntax to avoid mutations. If it's moved to Redux to support persistence, Maps are not serializable, so it's harder to implement.
-
-## State Management
-
-Talk about the performance penalty of using React Context instead of Redux. Redux lot of boilerplate for small applications.
-
-## TODO
-
-Extract css() to constants to avoid being serialized on each render
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it..

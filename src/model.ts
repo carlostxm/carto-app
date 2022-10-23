@@ -6,9 +6,9 @@ export interface BaseAction<T = any> {
 }
 
 export interface MapState {
-  layerCounter: number; // To create layer UUID
+  layerCounter: number;
   datasets: Record<string, Dataset>;
-  layers: Record<string, LayerConfig>; // Order is defined by layerOrder, indexed to optimaze search i.e. read or remove
+  layers: Record<string, LayerConfig>;
   layerVisConfigs: Record<string, LayerVisConfig>;
   layerOrder: string[];
 }

@@ -2,6 +2,34 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Functionality
+
+This application renders three predefined layers on top of a `maplibre` base map using `deck.gl` and `@deck.gl/carto`.
+
+To simplify the functionality, the datasets are predefined and requests are launched when the application is initialized. When the dataset info is received by the asynchronous request a layer is created.
+
+The datasets preconfigured are:
+
+- `carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup`
+- `carto-demo-data.demo_tables.retail_stores`
+- `carto-demo-data.demo_tables.airports`
+
+There are two types of layers:
+
+- query: Render the default `CartoLayer`'s point layer.
+- tilesets: Render a tileset layer.
+
+**Extra credit**: As layers are added to the `layerOrder` list as the `fetchDataset` response is received, some layers can overlap the others. A **visibility** button (represented with an eye icon) has been added to each layer card to hide/show individually.
+
+The following `point` layer's parameters can be configured:
+
+- Fill color
+- Outline color
+- Outline size
+- Radius
+
+Note: `tileset` layers cannot be customized as is out of the scope of this test application.
+
 ## Project structure
 
 ### Folders
@@ -30,35 +58,27 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 | LayersPanel.tsx  | Display the layers shown in the map in renderization order                              |
 | MapContainer.tsx | Responsible of showing the base map and creating the layers objects passed to `deck.gl` |
 
-## Functionality
+## Application State
 
-This application renders three layers on top of a `maplibre` base map.
+### State Management
 
-To simplify the functionality, the datasets are predefined and requests are launched when the application is initialized. When the dataset info is received by the asynchronous request a layer is created.
+There are state dependencies between components that make necesssary a global state management solution.
 
-The datasets preconfigured are:
+This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for a small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for enterprise-grade applications where **Redux** is more suitable.
 
-- `carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup`
-- `carto-demo-data.demo_tables.retail_stores`
-- `carto-demo-data.demo_tables.airports`
+Although **React Context** is used, the architecture has been defined similarly to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the case that is required.
 
-There are two types of layers:
+#### useMapLayers
 
-- query: Render the default `CartoLayer`'s point layer.
-- tilesets: Render a tileset layer.
+The current `state` and `action`'s dispatcher are accessible by a dedicated hook called `useMapLayers`.
 
-**Extra credit**: As layers are added to the `layerOrder` list as the `fetchDataset` response is received, some layers can overlap the others. A **visibility** button (represented with an eye icon) has been added to each layer card to hide/show individually.
+#### Reducer
 
-The following `point` layer's parameters can be configured:
+All the state management logic in the `mapLayersReducer` allows being reused by the different components, having specialized rendering components.
 
-- Fill color
-- Outline color
-- Outline size
-- Radius
+#### Actions
 
-Note: `tileset` layers cannot be customized as is out of the scope of this test application.
-
-## State
+All state changes are driven by actions that are thrown from the components. Action types are defined in the `actions/actionTypes.ts` file.
 
 ### State Model
 
@@ -83,26 +103,6 @@ export interface MapState {
 | layerCounter    | number                         | Count of the layers created used to create a basic UUID generation function                           |
 
 `datasets`, `layers`, and `layerVisConfigs` has been modeled as an object indexed by a dataset or layer `id`. The other options analyzed were using an `Array` or a `Map`. Finally, data is stored in plain objects because is serializable and optimizes the read/remove operations. `Map` was discarded because in case of implementing persistence, it makes harder the serialization in the local storage or an external service.
-
-### State Management
-
-There are state dependencies between components that make necesssary a global state management solution.
-
-This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for a small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for enterprise-grade applications where **Redux** is more suitable.
-
-Although **React Context** is used, the architecture has been defined similarly to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the case that is required.
-
-#### useMapLayers
-
-The current `state` and `action`'s dispatcher are accessible by a dedicated hook called `useMapLayers`.
-
-#### Reducer
-
-All the state management logic in the `mapLayersReducer` allows being reused by the different components, having specialized rendering components.
-
-#### Actions
-
-All state changes are driven by actions that are thrown from the components. Action types are defined in the `actions/actionTypes.ts` file.
 
 ## Asynchronous Requests
 

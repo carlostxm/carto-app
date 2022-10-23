@@ -30,26 +30,22 @@ const LayersPanel = ({
     >
       <h3>Layers</h3>
       <Stack spacing={1}>
-        {/* Show first layer on top */}
-        {layerOrder
-          .slice()
-          .reverse()
-          .map((layerId) => {
-            const layer = layers[layerId];
-            const dataset = datasets[layer.datasetId];
-            const { isVisible } = layerVisConfigs[layerId];
+        {layerOrder.map((layerId) => {
+          const layer = layers[layerId];
+          const dataset = datasets[layer.datasetId];
+          const { isVisible } = layerVisConfigs[layerId];
 
-            return (
-              <LayerCard
-                key={layer.id}
-                onClick={handleLayerClick(layer)}
-                onToggleLayerVisible={onToggleLayerVisible}
-                config={layer}
-                dataset={dataset}
-                isVisible={isVisible}
-              />
-            );
-          })}
+          return (
+            <LayerCard
+              key={layer.id}
+              onClick={handleLayerClick(layer)}
+              onToggleLayerVisible={onToggleLayerVisible}
+              config={layer}
+              dataset={dataset}
+              isVisible={isVisible}
+            />
+          );
+        })}
       </Stack>
     </div>
   );

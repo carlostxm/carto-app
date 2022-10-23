@@ -1,4 +1,5 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
+import React, { useMemo } from 'react';
 import DeckGL from '@deck.gl/react/typed';
 import {
   CartoLayer,
@@ -20,6 +21,7 @@ import { isPointLayer, isTilesetLayer } from 'services';
 import maplibregl from '!maplibre-gl';
 //@ts-ignore
 import maplibreglWorker from 'maplibre-gl/dist/maplibre-gl-csp-worker';
+import { INITIAL_VIEW_STATE } from 'fixtures';
 //@ts-ignore
 maplibregl.workerClass = maplibreglWorker;
 
@@ -27,14 +29,6 @@ setDefaultCredentials({
   accessToken: process.env.REACT_APP_CARTO_TOKEN,
   apiBaseUrl: CARTO_BASE_URL,
 });
-
-const INITIAL_VIEW_STATE = {
-  longitude: -101.05485,
-  latitude: 39.9154,
-  zoom: 4,
-  pitch: 0,
-  bearing: 0,
-};
 
 const createLayersOverlay = (
   datasets: Record<string, Dataset>,
@@ -97,11 +91,11 @@ const MapContainer = () => {
     state: { datasets, layers: layerConfigs, layerVisConfigs, layerOrder },
   } = useMapLayers();
 
-  const layers = createLayersOverlay(
-    datasets,
-    layerConfigs,
-    layerVisConfigs,
-    layerOrder
+  // Memoized computation as it could be a heavy process in case of having a large list of layers
+  const layers = useMemo(
+    () =>
+      createLayersOverlay(datasets, layerConfigs, layerVisConfigs, layerOrder),
+    [datasets, layerConfigs, layerVisConfigs, layerOrder]
   );
 
   return (

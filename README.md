@@ -2,7 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Model
+## State model
+
+The state model has been defined with the following structure:
 
 ```
 export interface MapState {

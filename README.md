@@ -22,29 +22,27 @@ export interface MapState {
 | layerOrder      | string []                      | Layers rendering order where the first position is the layer rendered on top                          |
 | layerCounter    | number                         | Count of the layers created used to create a basic UUID generation function                           |
 
-### Engineering decission
-
-`datasets`, `layers` and `layerVisConfigs` has been modeled as an object indexed by a dataset or layer `id`. The other options analyzed has been using an `Array` or a `Map`. It has been chosen to use a plain object because is serializable and optimize read/remove operations. `Map` was discarded because in case of implementing persistence, it makes harder the serialization in the local storage or a external service.
+`datasets`, `layers`, and `layerVisConfigs` has been modeled as an object indexed by a dataset or layer `id`. The other options analyzed are using an `Array` or a `Map`. Finally, it has been chosen to use a plain object because is serializable and optimizes the read/remove operations. `Map` was discarded because in case of implementing persistence, it makes harder the serialization in the local storage or an external service.
 
 ## State Management
 
 There are state dependencies between components that makes needed a global state management solution.
 
-This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for this small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for entreprise grade applications where **Redux** is more suitable.
+This application uses **React Context** because the overhead added by the **Redux** boilerplate is too much for this small application. The tradeoff is the performance penalty added by **React Context**, although is not appreciated in this application, it should be considered for enterprise-grade applications where **Redux** is more suitable.
 
-Although **React Context** is used, the architecture has been defined similar to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the unlikely hypothetic case that this application is migrated in the future.
+Although **React Context** is used, the architecture has been defined similarly to the **Redux** architecture, using `actions` and `reducers`, which would simplify the migration in the unlikely hypothetic case that this application is migrated in the future.
 
 ### useMapLayers
 
-Current `state` and `action`'s dispatcher are accesible by a dedicated hook called `useMapLayers`.
+The current `state` and `action`'s dispatcher are accessible by a dedicated hook called `useMapLayers`.
 
 ### Reducer
 
-All the state management logic in the `mapLayersReducer` which allows to be reused by the different components, having spetialized rendering components.
+All the state management logic in the `mapLayersReducer` allows being reused by the different components, having specialized rendering components.
 
 ### Actions
 
-All state changes are driven by actions which are thrown from the components. Actions types are defined in the `actions/actionTypes.ts` file.
+All state changes are driven by actions that are thrown from the components. Action types are defined in the `actions/actionTypes.ts` file.
 
 ## Asynchronous requests
 
